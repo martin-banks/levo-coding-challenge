@@ -1,29 +1,28 @@
-# Next.js + Tailwind CSS Example
+# Levo Coding challenge
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v2.2)](https://blog.tailwindcss.com/tailwindcss-2-2) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+**Challenge instructions on the inclluded PDF**
 
-It uses the new [`Just-in-Time Mode`](https://tailwindcss.com/docs/just-in-time-mode) for Tailwind CSS.
 
-## Preview
+## Assumptions + descision
 
-Preview the example live on [StackBlitz](http://stackblitz.com/):
+- Content for the header is not included
+- Each card displays the date (DD/MM/YYYY), title and summary of each article
+- In addition; include the name of the news site source; help readers find sources they prefer (and avoid those they don't)
+- The Read more button will open a new window linking out to the full artilce
+- 'Load More' button will load an additional 6 articles
+- Grid should reflow gracefully to suit different screen sizes
+- This is a public api with no private key; therefore we can fetch data from the client
+- Each article has an image reference as part of it's response; let's use it! Images can provide more information at a glance about the content and assit in creating a visual cadence for improved browsing
+- Adding a background picture for the header to create a little more visual intrest
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
 
-## Deploy your own
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+## Tech
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+- Next.js
+- Tailwind.css
 
-## How to use
+Run `npm install` to install the dependancies
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+Run `npm run dev` to start local dev server
 
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-# or
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).

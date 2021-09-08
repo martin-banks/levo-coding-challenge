@@ -1,82 +1,90 @@
-import Head from 'next/head'
+import { useEffect, useState } from 'react'
+// import Head from 'next/head'
 
-export default function Home() {
+import Error from '../components/error'
+import Spinner from '../components/spinner'
+import CardGrid from '../components/card-grid'
+
+import getContent from '../helpers/get-content'
+
+export default function Home (props) {
+
+  const [ currentPage, setCurrentPage ] = useState(1)
+  const [ itemsPerPage, setItemsPerPage ] = useState(6)
+  const [ articleList, setArticleList ] = useState([])
+  const [ isLoading, setIsLoading ] = useState(true)
+  // const [ error, setError ] = useState({ title: 'Oh no!!', error: 'This is a test error message'})
+  const [ error, setError ] = useState(null)
+
+
+  useEffect(async () => {
+    setIsLoading(true)
+    console.log({ currentPage })
+    console.log('from:', itemsPerPage * (currentPage - 1), ' | to:', itemsPerPage * currentPage,)
+    try {
+      const from = itemsPerPage * (currentPage - 1)
+      const response = await getContent.articleList({
+        from,
+        limit: itemsPerPage
+      })
+      setArticleList(previous => [ ...previous, ...response ])
+
+    } catch (error) {
+      setError({
+        title: 'Error fetching articles list',
+        error: JSON.stringify(error, null, 2)
+      })
+    }
+
+    setIsLoading(false)
+  }, [ currentPage ])
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className="border-box pb-24">
+      <main className="">
+        {
+          error && <Error title={ error.title } error={ error.error } />
+        }
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
+        <section className="relative mb-12 justify-self-center w-full">
+          <img
+            className="absolute w-full h-full object-cover"
+            src="https://spaceholder.cc/2000x1000"
+            alt=""
+            roloe="presentation"
+          />
+          <div className="grid justify-center text-center text-white w-full">
+            <div className="absolute w-full h-full bg-gray-900 opacity-40" />
+            <div className="p-12 pt-24 max-w-3xl">
+              <h1 className="relative text-4xl font-extrabold mb-4">Anim cillum non aute ipsum sint commodo dolor enim.</h1>
+              <p className="relative text-base">Eu in laboris minim non pariatur. Cupidatat eu in do ea minim aliqua adipisicing culpa commodo. Velit non aliquip magna ea do in deserunt deserunt mollit anim esse. Reprehenderit ex eiusmod eu veniam ad ex.</p>
+            </div>
+          </div>
+        </section>
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
+        <section className="p-4 md:p-8 lg:p-12 max-w-5xl justify-self-center mx-auto">
+          {
+            articleList.length &&
+              <CardGrid articleList={ articleList } />
+          }
+        </section>
 
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
 
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
+        {
+          !isLoading &&
+            <section className="w-full max-w-xl py-12 mx-auto">
+              <button
+                className="bg-gray-700 hover:bg-gray-500 hover:-translate-y-1 hover:shadow-md text-white px4 py-4 rounded-lg w-full transition-all"
+                onClick={ () => setCurrentPage(current => current + 1) }
+              >Load more</button>
+            </section>
+        }
+        {
+          isLoading &&
+            <Spinner />
+        }
+\      </main>
     </div>
   )
 }
+
